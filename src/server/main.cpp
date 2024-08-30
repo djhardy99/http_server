@@ -31,7 +31,7 @@ int main() {
         close(sockfd);
         return 1;
     }
-    std::cout << "Socket successfully bound to port 8080" << std::endl;
+    std::cout << "Socket successfully bound to port "<< PORT << std::endl;
 
     listen(sockfd, 5);
     // Close the socket

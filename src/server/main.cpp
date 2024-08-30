@@ -7,6 +7,7 @@
 #include <arpa/inet.h>  // inet_addr
 
 int main() {
+    int PORT = 8080;
     int sockfd;
 
     // Create a socket
@@ -21,8 +22,8 @@ int main() {
     struct sockaddr_in server_addr;
     memset(&server_addr, 0, sizeof(server_addr)); // Clear the structure
     server_addr.sin_family = AF_INET; // Address family
-    server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to all available interfaces
-    server_addr.sin_port = htons(8080); // Port to bind to (convert to network byte order)
+    server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to all available interfaces (INADDR_ANY = 0)
+    server_addr.sin_port = htons(PORT); // Port to bind to (convert to network byte order)
     // Bind the socket to the address and port
     int bind_respones_code = bind(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr));
     if (bind_respones_code < 0) {
@@ -31,6 +32,8 @@ int main() {
         return 1;
     }
     std::cout << "Socket successfully bound to port 8080" << std::endl;
+
+    listen(sockfd, 5);
     // Close the socket
     close(sockfd);
 

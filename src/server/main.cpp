@@ -33,7 +33,11 @@ int main() {
     }
     std::cout << "Socket successfully bound to port "<< PORT << std::endl;
 
-    listen(sockfd, 5);
+    listen(sockfd, 5); // 5 is the maximum number of client connections that can be queued
+    int clientSocket = accept(sockfd, nullptr, nullptr);
+    char buffer[1024] = {0};
+    recv(clientSocket, buffer, sizeof(buffer), 0);
+    std::cout << "Message from client: " << buffer << std::endl;
     // Close the socket
     close(sockfd);
 

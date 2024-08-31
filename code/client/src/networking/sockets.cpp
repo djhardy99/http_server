@@ -1,11 +1,4 @@
-#include <iostream>
-#include <cstring>      // memset
-#include <unistd.h>     // close
-#include <sys/types.h>  // socket types
-#include <sys/socket.h> // socket functions
-#include <netinet/in.h> // sockaddr_in and htons
-#include <arpa/inet.h>  // inet_addr
-#include <stdexcept> // Runtime exceptiosn
+#include "networking/sockets.h"
 int bind_socket(){
     const int PORT = 8080;
 
@@ -23,6 +16,7 @@ int bind_socket(){
     // Connect to the server
     const int connect_status_code = connect(clientSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress));
     if (connect_status_code < 0) {
+        close(clientSocket);
         throw std::runtime_error("Error: Unable to connect to server");
     }
     return clientSocket;
@@ -31,7 +25,7 @@ void send_socket(int& clientSocket,const char* message) {
     // Send a message to the server
     const int send_status_code = send(clientSocket, message, strlen(message), 0);
     if (send_status_code < 0) {
-        throw std::runtime_error("Error: Unable to create socket");
+        throw std::runtime_error("Error: Unable to send message");
     }
 }
 void listen_socket(){

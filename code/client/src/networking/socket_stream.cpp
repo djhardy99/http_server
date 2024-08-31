@@ -5,7 +5,6 @@
 #include <sys/socket.h> // socket functions
 #include <netinet/in.h> // sockaddr_in and htons
 #include <arpa/inet.h>  // inet_addr
-
 int send_data() {
     int PORT = 8080;
 

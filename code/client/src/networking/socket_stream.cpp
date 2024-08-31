@@ -35,8 +35,10 @@ void send_socket(int& clientSocket,const char* message) {
     }
 }
 void listen_socket(){
-    int a = 1;
+
 }
 void close_socket(int& clientSocket){
+    const char* message = ":logoff:";
+    send_socket(client_socket,message)
     close(clientSocket);
 }

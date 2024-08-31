@@ -8,6 +8,21 @@ void chatloop(){
   std::cout << "Connecting to chatroom" << std::endl;  
   int client_socket = bind_socket();
   std::cout << "Connected" << std::endl; 
-  const char* message = "Hello, server!";
-  send_socket(client_socket,message);
+  std::string input;
+  while(true){
+    std::getline(std::cin, input);
+    if (input == ":q"){
+      break
+    }
+    const char* message = input.c_str();
+    send_socket(client_socket,message);
+  }
+  std::cout << "Quitting server" << std::endl;
+  close_socket(client_socket);
+}
+void send_thread(){
+
+}
+void listen_thread(){
+  
 }

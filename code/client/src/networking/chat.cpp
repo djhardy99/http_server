@@ -12,7 +12,7 @@ void chatloop(){
   while(true){
     std::getline(std::cin, input);
     if (input == ":q"){
-      break
+      break;
     }
     const char* message = input.c_str();
     send_socket(clientSocket,message);

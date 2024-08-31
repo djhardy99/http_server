@@ -39,6 +39,6 @@ void listen_socket(){
 }
 void close_socket(int& clientSocket){
     const char* message = ":logoff:";
-    send_socket(clientSocket,message)
+    send_socket(clientSocket,message);
     close(clientSocket);
 }

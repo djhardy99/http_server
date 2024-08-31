@@ -1,4 +1,4 @@
-.PHONY: all client server clean preprocess assemble disassemble
+.PHONY: all client server clean preprocess assemble disassemble run_server run_client
 
 CXX = g++
 CXXFLAGS = -Wall -Iinclude
@@ -90,3 +90,8 @@ $(DISASSEMBLED_DIR)/$(SERVER_OBJ_DIR)/%.txt: $(SERVER_OBJ_DIR)/%.o | $(DISASSEMB
 # Clean up build and target directories
 clean:
 	rm -rf $(OBJ_DIR) $(TARGET_DIR) $(ASSEMBLY_DIR)
+
+run_client:
+	./target/client.exe
+run_server:
+	./target/server.exe

@@ -4,6 +4,6 @@ build:
 	g++ -Wall -Iinclude  src/server/*.cpp -o build/server.exe
 
 client:
-	./build/server.exe
+	./build/client.exe
 server:
 	./build/server.exe

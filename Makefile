@@ -1,16 +1,16 @@
 .PHONY: all client server clean preprocess assemble disassemble run_server run_client
 
 CXX = g++
-CXXFLAGS = -Wall -Iinclude
-OBJ_DIR = bin
+CXXFLAGS = -Wall -Icode/client/include -Icode/server/include
+OBJ_DIR = build/bin
 CLIENT_OBJ_DIR = $(OBJ_DIR)/client
 SERVER_OBJ_DIR = $(OBJ_DIR)/server
-TARGET_DIR = target
+TARGET_DIR = build/target
 CLIENT_TARGET = $(TARGET_DIR)/client.exe
 SERVER_TARGET = $(TARGET_DIR)/server.exe
 
 # Directories for assembly outputs
-ASSEMBLY_DIR = assembly
+ASSEMBLY_DIR = build/assembly
 PREPROCESSED_DIR = $(ASSEMBLY_DIR)/preprocessed
 ASSEMBLED_DIR = $(ASSEMBLY_DIR)/assembled
 DISASSEMBLED_DIR = $(ASSEMBLY_DIR)/disassembled
@@ -24,19 +24,19 @@ $(PREPROCESSED_DIR) $(ASSEMBLED_DIR) $(DISASSEMBLED_DIR):
 	mkdir -p $@
 
 # Collect source files
-CLIENT_SRCS = $(wildcard src/client/*.cpp)
-SERVER_SRCS = $(wildcard src/server/*.cpp)
+CLIENT_SRCS = $(wildcard code/client/src/*.cpp)
+SERVER_SRCS = $(wildcard code/server/src/*.cpp)
 
 # Convert source files to object files
-CLIENT_OBJS = $(CLIENT_SRCS:src/client/%.cpp=$(CLIENT_OBJ_DIR)/%.o)
-SERVER_OBJS = $(SERVER_SRCS:src/server/%.cpp=$(SERVER_OBJ_DIR)/%.o)
+CLIENT_OBJS = $(CLIENT_SRCS:code/client/src/%.cpp=$(CLIENT_OBJ_DIR)/%.o)
+SERVER_OBJS = $(SERVER_SRCS:code/server/src/%.cpp=$(SERVER_OBJ_DIR)/%.o)
 
 # Compile client sources into object files
-$(CLIENT_OBJ_DIR)/%.o: src/client/%.cpp | $(OBJ_DIR) $(CLIENT_OBJ_DIR)
+$(CLIENT_OBJ_DIR)/%.o: code/client/src/%.cpp | $(OBJ_DIR) $(CLIENT_OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Compile server sources into object files
-$(SERVER_OBJ_DIR)/%.o: src/server/%.cpp | $(OBJ_DIR) $(SERVER_OBJ_DIR)
+$(SERVER_OBJ_DIR)/%.o: code/server/src/%.cpp | $(OBJ_DIR) $(SERVER_OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Link client executable
@@ -52,46 +52,47 @@ $(SERVER_TARGET): $(SERVER_OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $(SERVER_OBJS)
 
 # Preprocess code
-preprocess: $(patsubst src/client/%.cpp,$(PREPROCESSED_DIR)/src/client/%.cpp,$(CLIENT_SRCS)) \
-            $(patsubst src/server/%.cpp,$(PREPROCESSED_DIR)/src/server/%.cpp,$(SERVER_SRCS))
+preprocess: $(patsubst code/client/src/%.cpp,$(PREPROCESSED_DIR)/code/client/src/%.cpp,$(CLIENT_SRCS)) \
+            $(patsubst code/server/src/%.cpp,$(PREPROCESSED_DIR)/code/server/src/%.cpp,$(SERVER_SRCS))
 
-$(PREPROCESSED_DIR)/src/client/%.cpp: src/client/%.cpp | $(PREPROCESSED_DIR)
+$(PREPROCESSED_DIR)/code/client/src/%.cpp: code/client/src/%.cpp | $(PREPROCESSED_DIR)
 	mkdir -p $(dir $@)
 	$(CXX) -E $< -o $@
 
-$(PREPROCESSED_DIR)/src/server/%.cpp: src/server/%.cpp | $(PREPROCESSED_DIR)
+$(PREPROCESSED_DIR)/code/server/src/%.cpp: code/server/src/%.cpp | $(PREPROCESSED_DIR)
 	mkdir -p $(dir $@)
 	$(CXX) -E $< -o $@
 
 # Assemble code
-assemble: $(patsubst src/client/%.cpp,$(ASSEMBLED_DIR)/src/client/%.s,$(CLIENT_SRCS)) \
-          $(patsubst src/server/%.cpp,$(ASSEMBLED_DIR)/src/server/%.s,$(SERVER_SRCS))
+assemble: $(patsubst code/client/src/%.cpp,$(ASSEMBLED_DIR)/code/client/src/%.s,$(CLIENT_SRCS)) \
+          $(patsubst code/server/src/%.cpp,$(ASSEMBLED_DIR)/code/server/src/%.s,$(SERVER_SRCS))
 
-$(ASSEMBLED_DIR)/src/client/%.s: src/client/%.cpp | $(ASSEMBLED_DIR)
+$(ASSEMBLED_DIR)/code/client/src/%.s: code/client/src/%.cpp | $(ASSEMBLED_DIR)
 	mkdir -p $(dir $@)
 	$(CXX) -S $< -o $@
 
-$(ASSEMBLED_DIR)/src/server/%.s: src/server/%.cpp | $(ASSEMBLED_DIR)
+$(ASSEMBLED_DIR)/code/server/src/%.s: code/server/src/%.cpp | $(ASSEMBLED_DIR)
 	mkdir -p $(dir $@)
 	$(CXX) -S $< -o $@
 
 # Disassemble object files
-disassemble: $(patsubst $(CLIENT_OBJ_DIR)/%.o,$(DISASSEMBLED_DIR)/$(CLIENT_OBJ_DIR)/%.txt,$(CLIENT_OBJS)) \
-              $(patsubst $(SERVER_OBJ_DIR)/%.o,$(DISASSEMBLED_DIR)/$(SERVER_OBJ_DIR)/%.txt,$(SERVER_OBJS))
+disassemble: $(patsubst $(CLIENT_OBJ_DIR)/%.o,$(DISASSEMBLED_DIR)/code/client/src/%.txt,$(CLIENT_OBJS)) \
+              $(patsubst $(SERVER_OBJ_DIR)/%.o,$(DISASSEMBLED_DIR)/code/server/src/%.txt,$(SERVER_OBJS))
 
-$(DISASSEMBLED_DIR)/$(CLIENT_OBJ_DIR)/%.txt: $(CLIENT_OBJ_DIR)/%.o | $(DISASSEMBLED_DIR)
+$(DISASSEMBLED_DIR)/code/client/src/%.txt: $(CLIENT_OBJ_DIR)/%.o | $(DISASSEMBLED_DIR)
 	mkdir -p $(dir $@)
 	objdump -d $< > $@
 
-$(DISASSEMBLED_DIR)/$(SERVER_OBJ_DIR)/%.txt: $(SERVER_OBJ_DIR)/%.o | $(DISASSEMBLED_DIR)
+$(DISASSEMBLED_DIR)/code/server/src/%.txt: $(SERVER_OBJ_DIR)/%.o | $(DISASSEMBLED_DIR)
 	mkdir -p $(dir $@)
 	objdump -d $< > $@
 
 # Clean up build and target directories
 clean:
-	rm -rf $(OBJ_DIR) $(TARGET_DIR) $(ASSEMBLY_DIR)
+	rm -rf build
 
 run_client:
-	./target/client.exe
+	./build/target/client.exe
+
 run_server:
-	./target/server.exe
+	./build/target/server.exe

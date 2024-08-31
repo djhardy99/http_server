@@ -6,7 +6,7 @@
 #include <netinet/in.h> // sockaddr_in and htons
 #include <arpa/inet.h>  // inet_addr
 
-int main() {
+int send_data() {
     int PORT = 8080;
 
     // Create a socket
@@ -34,7 +34,10 @@ int main() {
     if (send(clientSocket, message, strlen(message), 0) < 0) {
         std::cerr << "Error: Unable to send message" << std::endl;
     }
-
+    const char* message2 = "q";
+    if (send(clientSocket, message2, strlen(message2), 0) < 0) {
+        std::cerr << "Error: Unable to send message" << std::endl;
+    }
     // Close the socket
     close(clientSocket);
 

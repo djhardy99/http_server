@@ -1,6 +1,5 @@
 # Dev folders
-dev/
-assembly/
+build/
 # Prerequisites
 *.d
 

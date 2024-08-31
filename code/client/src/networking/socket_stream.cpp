@@ -5,14 +5,14 @@
 #include <sys/socket.h> // socket functions
 #include <netinet/in.h> // sockaddr_in and htons
 #include <arpa/inet.h>  // inet_addr
-int send_data() {
-    int PORT = 8080;
+#include <stdexcept> // Runtime exceptiosn
+int bind_socket(){
+    const int PORT = 8080;
 
     // Create a socket
-    int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
+    const int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket < 0) {
-        std::cerr << "Error: Unable to create socket: " << clientSocket << std::endl;
-        return 1;
+        throw std::runtime_error("Error: Unable to create socket");
     }
 
     // Prepare the sockaddr_in structure
@@ -20,25 +20,23 @@ int send_data() {
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(PORT);
     serverAddress.sin_addr.s_addr = INADDR_ANY; // Use the server's IP address
-
     // Connect to the server
-    if (connect(clientSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
-        std::cerr << "Error: Unable to connect to server" << std::endl;
-        close(clientSocket);
-        return 1;
+    const int connect_status_code = connect(clientSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress));
+    if (connect_status_code < 0) {
+        throw std::runtime_error("Error: Unable to connect to server");
     }
-
+    return clientSocket;
+}
+void send_socket(int& clientSocket,const char* message) {
     // Send a message to the server
-    const char* message = "Hello, server!";
-    if (send(clientSocket, message, strlen(message), 0) < 0) {
-        std::cerr << "Error: Unable to send message" << std::endl;
+    const int send_status_code = send(clientSocket, message, strlen(message), 0);
+    if (send_status_code < 0) {
+        throw std::runtime_error("Error: Unable to create socket");
     }
-    const char* message2 = "q";
-    if (send(clientSocket, message2, strlen(message2), 0) < 0) {
-        std::cerr << "Error: Unable to send message" << std::endl;
-    }
-    // Close the socket
+}
+void listen_socket(){
+    int a = 1;
+}
+void close_socket(int& clientSocket){
     close(clientSocket);
-
-    return 0;
 }

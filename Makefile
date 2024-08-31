@@ -3,8 +3,8 @@
 # Directories
 BUILD_DIR = build
 CLIENT_SRC_DIR = code/client/src
-SERVER_SRC_DIR = code/server/src
 CLIENT_INCLUDE_DIR = code/client/include
+SERVER_SRC_DIR = code/server/src
 SERVER_INCLUDE_DIR = code/server/include
 
 # Executable Names
@@ -12,7 +12,7 @@ CLIENT_EXE = $(BUILD_DIR)/client.exe
 SERVER_EXE = $(BUILD_DIR)/server.exe
 
 # Find all source files
-CLIENT_SRCS = $(shell find $(CLIENT_SRC_DIR) -name '*.cpp')
+CLIENT_SRCS = $(shell find $(CLIENT_SRC_DIR) -name '*.cpp') 
 SERVER_SRCS = $(shell find $(SERVER_SRC_DIR) -name '*.cpp')
 
 # Build targets

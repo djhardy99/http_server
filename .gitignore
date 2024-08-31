@@ -1,4 +1,5 @@
 # Dev folders
+lib/
 build/
 # Prerequisites
 *.d

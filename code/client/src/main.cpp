@@ -1,5 +1,5 @@
-#include "networking/socket_stream.h"
+#include "networking/chat.h"
 int main() {
-    int a = send_data();
-    return a;
+    chatloop();
+    return 0;
 }

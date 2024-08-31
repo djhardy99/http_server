@@ -1,6 +1,6 @@
 #ifndef CHAT_H
 #define CHAT_H
 int chatloop();
-void send_thread();
-void listen_thread();
+void send_thread(int& clientSocket);
+void listen_thread(int& clientSocket);
 #endif // CHAT_H
